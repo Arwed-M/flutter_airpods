@@ -24,3 +24,5 @@ flutter:
     platforms:
       ios:
         pluginClass: FlutterAirpodsPlugin
+      macos:
+        pluginClass: FlutterAirpodsPlugin

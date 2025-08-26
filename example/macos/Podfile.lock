@@ -1,0 +1,22 @@
+PODS:
+  - flutter_airpods (0.0.1):
+    - FlutterMacOS
+  - FlutterMacOS (1.0.0)
+
+DEPENDENCIES:
+  - flutter_airpods (from `Flutter/ephemeral/.symlinks/plugins/flutter_airpods/macos`)
+  - FlutterMacOS (from `Flutter/ephemeral`)
+
+EXTERNAL SOURCES:
+  flutter_airpods:
+    :path: Flutter/ephemeral/.symlinks/plugins/flutter_airpods/macos
+  FlutterMacOS:
+    :path: Flutter/ephemeral
+
+SPEC CHECKSUMS:
+  flutter_airpods: 8a114c8a6433a4633bafe6afc8798e7bf2598dfb
+  FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
+
+PODFILE CHECKSUM: d16f5e5d196d1ca9863d7a71d5885cad7ffa7d2d
+
+COCOAPODS: 1.16.2
