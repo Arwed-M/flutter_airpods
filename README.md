@@ -51,8 +51,10 @@ Below is the complete JSON data that you can expect:
     magneticFieldX: 0,                    // Magnetic field vector along the x-axis in microteslas
     magneticFieldY: 0,                    // Magnetic field vector along the y-axis in microteslas
     magneticFieldZ: 0,                    // Magnetic field vector along the z-axis in microteslas
-    heading: 0                            // This property contains a value in the range of 0.0 to 360.0 degrees.
+    heading: 0,                           // This property contains a value in the range of 0.0 to 360.0 degrees.
                                           // A heading of 0.0 indicates that the attitude of the device matches the current reference frame.
+    sensorLocation: 1                     // Indicates which AirPod is providing the motion data
+                                          // 0 = Default, 1 = Left AirPod, 2 = Right AirPod
 }
 ```
 

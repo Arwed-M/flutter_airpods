@@ -1,3 +1,8 @@
+## 1.1.0
+
+- feat: Add sensorLocation property to identify which AirPod (left/right) provides motion data
+- feat: Support for macOS 14+
+
 ## 1.0.5
 
 - doc: Explains the received data more in detail

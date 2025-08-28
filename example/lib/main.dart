@@ -43,7 +43,15 @@ class _MyAppState extends State<MyApp> {
                   /// When AirPods are connected, but removed from ear, it will
                   /// stop receiving data.
                   if (snapshot.hasData) {
-                    return Text("${snapshot.data?.toJson()}");
+                    final data = snapshot.data!;
+                    return Column(
+                      children: [
+                        Text("Sensor Location: ${data.sensorLocation.description}",
+                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                        const SizedBox(height: 10),
+                        Text("Complete data: ${data.toJson()}"),
+                      ],
+                    );
                   } else {
                     /// AirPods are not connected yet
                     return const Text("Waiting for incoming data...");

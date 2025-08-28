@@ -24,6 +24,7 @@ struct DeviceMotionDataCodable: Codable {
     let magneticFieldZ: Double
     let magneticFieldAccuracy: Int32
     let heading: Double
+    let sensorLocation: Int
     
     init(deviceMotion: CMDeviceMotion) {
         quaternionX = deviceMotion.attitude.quaternion.x
@@ -47,6 +48,7 @@ struct DeviceMotionDataCodable: Codable {
         magneticFieldZ = deviceMotion.magneticField.field.z
         magneticFieldAccuracy = deviceMotion.magneticField.accuracy.rawValue
         heading = deviceMotion.heading
+        sensorLocation = deviceMotion.sensorLocation.rawValue
     }
 }
 

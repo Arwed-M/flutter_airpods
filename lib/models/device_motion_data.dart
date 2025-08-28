@@ -6,6 +6,7 @@ import 'package:flutter_airpods/models/magnetic_field.dart';
 import 'package:flutter_airpods/models/quaternion.dart';
 import 'package:flutter_airpods/models/rotation_rate.dart';
 import 'package:flutter_airpods/models/user_acceleration.dart';
+import 'package:flutter_airpods/models/sensor_location.dart';
 
 import 'calibrated_magnetic_field_accuracy.dart';
 
@@ -17,6 +18,7 @@ class DeviceMotionData extends Equatable {
   final UserAcceleration userAcceleration;
   final CalibratedMagneticField calibratedMagneticField;
   final num heading;
+  final SensorLocation sensorLocation;
 
   const DeviceMotionData(
     this.attitude,
@@ -25,6 +27,7 @@ class DeviceMotionData extends Equatable {
     this.userAcceleration,
     this.calibratedMagneticField,
     this.heading,
+    this.sensorLocation,
   );
 
   /// Creates a new DeviceMotionData from a JSON
@@ -58,6 +61,7 @@ class DeviceMotionData extends Equatable {
               json['magneticFieldZ']),
           accuracy),
       json['heading'],
+      SensorLocation.fromValue(json['sensorLocation'] ?? 0),
     );
   }
 
@@ -84,6 +88,7 @@ class DeviceMotionData extends Equatable {
         'magneticFieldZ': calibratedMagneticField.field.z,
         'magneticFieldAccuracy': calibratedMagneticField.accuracy.value,
         'heading': heading,
+        'sensorLocation': sensorLocation.value,
       };
 
   /// Used for comparison of device motion data objects.
@@ -94,6 +99,7 @@ class DeviceMotionData extends Equatable {
         rotationRate,
         userAcceleration,
         calibratedMagneticField,
-        heading
+        heading,
+        sensorLocation
       ];
 }

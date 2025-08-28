@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_airpods/models/device_motion_data.dart';
+export 'package:flutter_airpods/models/sensor_location.dart';
 
 /// API for accessing information about the currently connected airpods.
 class FlutterAirpods {
