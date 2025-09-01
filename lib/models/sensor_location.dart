@@ -1,23 +1,18 @@
-mixin SensorLocationMixin {
-  int get value;
-}
-
-/// An object that indicates the location of the device 
+/// An object that indicates the location of the device
 /// motion sensor that is providing the data.
-enum SensorLocation with SensorLocationMixin {
+enum SensorLocation {
   /// Raw values are defined as in [CMDeviceMotionSensorLocation]
   /// The default location for devices that don't specify a location.
   defaultLocation(0),
-  
+
   /// The headphone's left ear cup or bud.
   headphoneLeft(1),
-  
+
   /// The headphone's right ear cup or bud.
   headphoneRight(2);
 
   const SensorLocation(this.value);
 
-  @override
   final int value;
 
   /// Returns a human-readable description of the sensor location
