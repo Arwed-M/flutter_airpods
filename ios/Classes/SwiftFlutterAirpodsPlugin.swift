@@ -56,6 +56,22 @@ public class SwiftFlutterAirpodsPlugin: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {
         let eventChannel = FlutterEventChannel(name: "flutter_airpods.motion", binaryMessenger: registrar.messenger())
         eventChannel.setStreamHandler(AirPodsStreamHandler())
+        
+        // iPhone device motion stream
+        let phoneMotionChannel = FlutterEventChannel(name: "flutter_airpods.phone_motion", binaryMessenger: registrar.messenger())
+        phoneMotionChannel.setStreamHandler(PhoneMotionStreamHandler())
+
+        // Method channel to expose available attitude reference frames
+        let methodChannel = FlutterMethodChannel(name: "flutter_airpods.method", binaryMessenger: registrar.messenger())
+        methodChannel.setMethodCallHandler { call, result in
+            switch call.method {
+            case "availableAttitudeReferenceFrames":
+                let frames = CMMotionManager.availableAttitudeReferenceFrames()
+                result(NSNumber(value: frames.rawValue))
+            default:
+                result(FlutterMethodNotImplemented)
+            }
+        }
     }
 }
 
@@ -71,6 +87,8 @@ class AirPodsStreamHandler: NSObject, FlutterStreamHandler, CMHeadphoneMotionMan
     }
     
     func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
+        // Note: CMHeadphoneMotionManager does not support custom reference frames
+        // It always uses a default reference frame (similar to xArbitraryZVertical)
         airpods.startDeviceMotionUpdates(to: OperationQueue.current!) { motion, error in
             guard let motion = motion, error == nil else {
                 return
@@ -92,6 +110,40 @@ class AirPodsStreamHandler: NSObject, FlutterStreamHandler, CMHeadphoneMotionMan
     
     func onCancel(withArguments arguments: Any?) -> FlutterError? {
         airpods.stopDeviceMotionUpdates()
+        return nil
+    }
+}
+
+class PhoneMotionStreamHandler: NSObject, FlutterStreamHandler {
+    let motionManager = CMMotionManager()
+    
+    func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
+        guard motionManager.isDeviceMotionAvailable else {
+            events(FlutterError(code: "UNAVAILABLE", message: "Device motion not available", details: nil))
+            return nil
+        }
+        
+        motionManager.startDeviceMotionUpdates(to: OperationQueue.current!) { motion, error in
+            guard let motion = motion, error == nil else {
+                return
+            }
+            
+            let encoder = JSONEncoder()
+            let deviceMotionData = DeviceMotionDataCodable(deviceMotion: motion)
+            
+            guard let jsonData = try? encoder.encode(deviceMotionData),
+                  let jsonString = String(data: jsonData, encoding: .utf8) else {
+                return
+            }
+            
+            events(jsonString)
+        }
+        
+        return nil
+    }
+    
+    func onCancel(withArguments arguments: Any?) -> FlutterError? {
+        motionManager.stopDeviceMotionUpdates()
         return nil
     }
 }
