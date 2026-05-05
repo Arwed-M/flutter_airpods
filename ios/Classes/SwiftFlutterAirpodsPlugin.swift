@@ -68,6 +68,22 @@ public class SwiftFlutterAirpodsPlugin: NSObject, FlutterPlugin {
             case "availableAttitudeReferenceFrames":
                 let frames = CMMotionManager.availableAttitudeReferenceFrames()
                 result(NSNumber(value: frames.rawValue))
+            case "headphoneMotionAuthorizationStatus":
+                let status = CMHeadphoneMotionManager.authorizationStatus()
+                // Return a string matching the Dart enum:
+                // notDetermined, restricted, denied, authorized
+                switch status {
+                case .notDetermined:
+                    result("notDetermined")
+                case .restricted:
+                    result("restricted")
+                case .denied:
+                    result("denied")
+                case .authorized:
+                    result("authorized")
+                @unknown default:
+                    result("notDetermined")
+                }
             default:
                 result(FlutterMethodNotImplemented)
             }

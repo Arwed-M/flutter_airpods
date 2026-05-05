@@ -1,0 +1,4 @@
+# melos_managed_dependency_overrides: flutter_airpods
+dependency_overrides:
+  flutter_airpods:
+    path: ..

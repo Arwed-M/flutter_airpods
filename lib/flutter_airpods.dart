@@ -44,6 +44,22 @@ class CMAttitudeReferenceFrame {
   }
 }
 
+/// Authorization status for `CMHeadphoneMotionManager`, mirroring
+/// `CMAuthorizationStatus` from CoreMotion.
+enum HeadphoneMotionAuthorizationStatus {
+  /// The user has not yet been asked for permission.
+  notDetermined,
+
+  /// The app is not authorized and the user cannot change this (parental controls, MDM).
+  restricted,
+
+  /// The user explicitly denied access.
+  denied,
+
+  /// The user granted access.
+  authorized,
+}
+
 /// API for accessing information about the currently connected airpods.
 class FlutterAirpods {
   static const EventChannel _motionChannel =
@@ -52,6 +68,23 @@ class FlutterAirpods {
       EventChannel("flutter_airpods.phone_motion");
   static const MethodChannel _methodChannel =
       MethodChannel("flutter_airpods.method");
+
+  /// Returns the current `CMHeadphoneMotionManager` authorization status.
+  ///
+  /// On non-iOS/macOS platforms this always returns [HeadphoneMotionAuthorizationStatus.authorized]
+  /// because the feature is not gated by a permission there.
+  static Future<HeadphoneMotionAuthorizationStatus> get headphoneMotionAuthorizationStatus async {
+    try {
+      final String? raw = await _methodChannel.invokeMethod<String>('headphoneMotionAuthorizationStatus');
+      if (raw == 'authorized') return HeadphoneMotionAuthorizationStatus.authorized;
+      if (raw == 'restricted') return HeadphoneMotionAuthorizationStatus.restricted;
+      if (raw == 'denied')     return HeadphoneMotionAuthorizationStatus.denied;
+      return HeadphoneMotionAuthorizationStatus.notDetermined;
+    } on MissingPluginException {
+      // Plugin not registered (non-iOS platform or unit tests).
+      return HeadphoneMotionAuthorizationStatus.authorized;
+    }
+  }
 
   /// Gets the available attitude reference frames supported by the device.
   /// Returns a bitmask of available CMAttitudeReferenceFrame values.
